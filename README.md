@@ -20,6 +20,9 @@ Site estático de `thilia.pt`. Página "Em Breve" servida via **S3 + CloudFront*
 
 ## Deploy
 
+**Automático (GitHub Actions):** todo push na `main` dispara `.github/workflows/deploy.yml`, que faz `aws s3 sync` + invalidação do CloudFront. Autenticação via **OIDC** (role `thilia-pt-deploy`) — sem chaves AWS guardadas no GitHub.
+
+**Manual (fallback):**
 ```powershell
 pwsh -NoProfile -File .\deploy.ps1
 ```

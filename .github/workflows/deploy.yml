@@ -1,0 +1,41 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # necessario para OIDC
+  contents: read
+
+concurrency:
+  group: deploy-thilia
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::137566891486:role/thilia-pt-deploy
+          aws-region: us-east-1
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync . s3://thilia-pt-site \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "deploy.ps1" \
+            --exclude "README.md" \
+            --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E3AMLJLZ9BXUQR \
+            --paths "/*"
