@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 $Aws            = 'C:\Program Files\Amazon\AWSCLIV2\aws.exe'
 $Profile        = 'scholion-admin'
 $Bucket         = 'thilia-pt-site'
-$DistributionId = 'REPLACE_AFTER_CLOUDFRONT'   # preenchido apos criar a distribuicao
+$DistributionId = 'E3AMLJLZ9BXUQR'
 $Root           = $PSScriptRoot
 
 Write-Host "==> Sync para s3://$Bucket"
